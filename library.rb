@@ -9,6 +9,7 @@ def show_menu
     puts "7.dev stats"
     puts "8.exit"
     puts "9.Books Between years"
+    puts "10.Update book title"
 end
 
 def validate_input(value,field_name)
@@ -159,6 +160,39 @@ def display_books(book)
         puts "#{b[:title]} by #{b[:author]} was published in #{b[:year]}"
     end
 end
+
+def update_book_title(books)
+    print "enter the current title of the book:"
+    current_title =gets.chomp
+
+    current_book = books.find do |book|
+        book[:title].downcase == current_title.downcase
+    end
+
+    if !current_book
+        puts "book not found"
+    else
+        print "enter the new title:"
+        new_title = gets.chomp
+        new_title.strip!
+        return unless validate_input(new_title,"New Title")
+
+        puts "preview:"
+        puts "old title: #{current_title}"
+        puts "new title: #{new_title}"
+        puts "confirm update? (y/n)"
+
+        confirm =gets.chomp.downcase
+
+        if confirm =="y"
+            current_book[:title] = new_title
+            puts "book title updated"
+        else
+            puts "update cancelled"
+        end
+    end
+end
+
 books=[]
 loop do
     show_menu
@@ -190,6 +224,8 @@ loop do
         break
     when "9"
         books_between_years(books)
+    when "10"
+        update_book_title(books)
     else
         puts "Invalid Choice"
     end
