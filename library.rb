@@ -1,90 +1,106 @@
-books=[]
-loop do
+def show_menu
     puts "\n === Library Managament System ==="
     puts "1.Add a book"
     puts "2.List first 3 books"
-    puts "3.Search for a book"
-    puts "4.Update a book"
-    puts "5.Delete a book"
-    puts "6.Exit"
-    puts "7.List all books"
-    puts "8.Browse By Genre"
-    
+    puts "3.List all the books"
+    puts "4.delete a book"
+    puts "5.search for a book"
+    puts "6.exit"
+end
+
+def add_book(books)
+    print "enter title:"
+    title = gets.chomp
+
+    print "enter author:"
+    author = gets.chomp
+
+    print "enter year:"
+    year = gets.chomp
+
+    print "enter genre:"
+    genre = gets.chomp
+    books.push({
+        title:title,
+        author:author,
+        year:year,
+        genre:genre
+    })
+end
+
+def list_books(books)
+    books.first(3).each_with_index do |book,index|
+            puts "#{index+1}.#{book[:title]} by #{book[:author]} was published in #{book[:year]}"
+    end
+end
+
+def list_all_books(books)
+    books.each_with_index do |book,index|
+            puts "#{index+1}.#{book[:title]} by #{book[:author]} was published in #{book[:year]}"
+    end
+end
+
+def delete_book(books)
+    print "enter title to delete book:"
+    title = gets.chomp
+
+    book_found=books.any? do |book|
+        book[:title].downcase == title.downcase
+    end
+
+    if !book_found
+        puts "book not found!"
+    else
+        books.reject! do |book|
+            book[:title].downcase == title.downcase
+        end
+        puts "book deleted"
+    end
+end
+
+def search_book(books)
+    print "enter title to search for a book:"
+    title = gets.chomp
+
+    found_book = books.find do |book|
+        book[:title].downcase == title.downcase
+    end
+
+    if found_book.empty?
+        puts "book bot found"
+    else
+        puts "title: #{found_book[:title]}"
+        puts "author: #{found_book[:author]}"
+        puts "year: #{found_book[:year]}"
+        puts "genre: #{found_book[:genre]}"
+    end
+end
+
+books=[]
+loop do
+    show_menu
     print "Enter your choice: "
     choice = gets.chomp
 
     case choice
     when "1"
-        print "enter title:"
-        title = gets.chomp
-
-        print "enter author:"
-        author = gets.chomp
-
-        print "enter year:"
-        year = gets.chomp
-
-        print "enter genre:"
-        genre = gets.chomp
-        books.push({
-            title:title,
-            author:author,
-            year:year,
-            genre:genre
-        })
+        add_book(books)
     
     when "2"
-        books.first(3).each_with_index do |book,index|
-            puts "#{index+1}.#{book[:title]} by #{book[:author]} was published in #{book[:year]}"
-        end
+        list_books(books)
     
     when "3"
-        puts "Search for a book-coming soon!"
+        list_all_books(books)
     
     when "4"
-        puts "Update a book-coming soon!"
+        delete_book(books)
     
     when "5"
-        print "enter title to delete the book:"
-        title=gets.chomp
+        search_book(books)
 
-        book_found = books.any? do |book|
-            book[:title].downcase == title.downcase
-        end
-
-        if book_found
-            books.reject! do |book|
-                book[:title].downcase == title.downcase
-            end
-            puts "book deleted successfully!"
-        else
-            puts "book not found!"
-        end
-    
     when "6"
         puts "Goodbye!"
         break
-    
-    when "7"
-        books.each_with_index do |book,index|
-            puts "#{index+1}.#{book[:title]} by #{book[:author]} was published in #{book[:year]}"
-        end
-    when "8"
-        print "enter genre to browse:"
-        genre=gets.chomp
-
-        matching_books = books.select do |book|
-            book[:genre].downcase == genre.downcase
-        end
-
-        if matching_books.empty?
-            puts "No books under the genre #{genre} found!"
-        else
-
-            matching_books.each_with_index do |book,index|
-                puts "#{index+1}.#{book[:title]} by #{book[:author]} was published in #{book[:year]} and belongs to Genre #{book[:genre]}"
-            end
-        end
     else
         puts "Invalid Choice"
     end
