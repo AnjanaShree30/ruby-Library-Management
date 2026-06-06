@@ -8,6 +8,7 @@ def show_menu
     puts "6.Library Summary"
     puts "7.dev stats"
     puts "8.exit"
+    puts "9.Books Between years"
 end
 
 def add_book(books)
@@ -115,6 +116,36 @@ def dev_stats(books)
         puts "#{author}"
     end
 end
+
+def books_between_years(books)
+    print "enter the start year:"
+    start_year = gets.chomp.to_i
+
+    print "enter the end year:"
+    end_year = gets.chomp.to_i
+
+    if end_year < start_year
+        puts "Invalid range"
+    
+    else
+        books_in_range = books.select do |book|
+            book[:year].to_i >=start_year && book[:year].to_i <=end_year
+        end
+
+        sort_books=books_in_range.sort_by do |book|
+            book[:year].to_i
+        end
+
+        if sort_books.empty?
+            puts "no books in the given range"
+        else
+            sort_books.each do |book|
+                puts "#{book[:title]} by #{book[:author]} was published in #{book[:year]}"
+            end
+        end
+    end
+end
+
 books=[]
 loop do
     show_menu
@@ -144,6 +175,8 @@ loop do
     when "8"
         puts "Goodbye!"
         break
+    when "9"
+        books_between_years(books)
     else
         puts "Invalid Choice"
     end
