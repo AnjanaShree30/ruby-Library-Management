@@ -8,6 +8,7 @@ loop do
     puts "5.Delete a book"
     puts "6.Exit"
     puts "7.List all books"
+    puts "8.Browse By Genre"
     
     print "Enter your choice: "
     choice = gets.chomp
@@ -23,10 +24,13 @@ loop do
         print "enter year:"
         year = gets.chomp
 
+        print "enter genre:"
+        genre = gets.chomp
         books.push({
             title:title,
             author:author,
-            year:year
+            year:year,
+            genre:genre
         })
     
     when "2"
@@ -64,6 +68,22 @@ loop do
     when "7"
         books.each_with_index do |book,index|
             puts "#{index+1}.#{book[:title]} by #{book[:author]} was published in #{book[:year]}"
+        end
+    when "8"
+        print "enter genre to browse:"
+        genre=gets.chomp
+
+        matching_books = books.select do |book|
+            book[:genre].downcase == genre.downcase
+        end
+
+        if matching_books.empty?
+            puts "No books under the genre #{genre} found!"
+        else
+
+            matching_books.each_with_index do |book,index|
+                puts "#{index+1}.#{book[:title]} by #{book[:author]} was published in #{book[:year]} and belongs to Genre #{book[:genre]}"
+            end
         end
     else
         puts "Invalid Choice"
