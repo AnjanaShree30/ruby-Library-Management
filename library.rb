@@ -11,18 +11,33 @@ def show_menu
     puts "9.Books Between years"
 end
 
+def validate_input(value,field_name)
+    if value.strip.empty?
+        puts "#{field_name} Can't be blank"
+        return false
+    end
+    true
+end
 def add_book(books)
     print "enter title:"
     title = gets.chomp
 
+    return unless validate_input(title,"Title")
+
     print "enter author:"
     author = gets.chomp
 
+    return unless validate_input(author,"Author")
     print "enter year:"
     year = gets.chomp
 
+    return unless validate_input(year,"year")
+    
     print "enter genre:"
     genre = gets.chomp
+
+    return unless validate_input(genre,"Genre")
+    
     books.push({
         title:title,
         author:author,
@@ -32,15 +47,11 @@ def add_book(books)
 end
 
 def list_books(books)
-    books.first(3).each_with_index do |book,index|
-            puts "#{index+1}.#{book[:title]} by #{book[:author]} was published in #{book[:year]}"
-    end
+    display_books(books.first(3))
 end
 
 def list_all_books(books)
-    books.each_with_index do |book,index|
-            puts "#{index+1}.#{book[:title]} by #{book[:author]} was published in #{book[:year]}"
-    end
+    display_books(books)
 end
 
 def delete_book(books)
@@ -72,10 +83,7 @@ def search_book(books)
     if found_book.empty?
         puts "book bot found"
     else
-        puts "title: #{found_book[:title]}"
-        puts "author: #{found_book[:author]}"
-        puts "year: #{found_book[:year]}"
-        puts "genre: #{found_book[:genre]}"
+        display_books(found_book)
     end
 end
 
@@ -93,8 +101,10 @@ def library_summary(books)
         end
 
         puts "total books: #{total_books}"
-        puts "most recent book: #{most_recent_book[:title]} by #{most_recent_book[:author]} was published in #{most_recent_book[:year]} and belongs to genre #{most_recent_book[:genre]}"
-        puts "oldest book: #{oldest_book[:title]} (#{oldest_book[:year]})"
+        puts "most recent book:"
+        display_books(most_recent_book)
+        puts "oldest book:"
+        display_books(oldest_book)
     end
 end
 
@@ -139,13 +149,16 @@ def books_between_years(books)
         if sort_books.empty?
             puts "no books in the given range"
         else
-            sort_books.each do |book|
-                puts "#{book[:title]} by #{book[:author]} was published in #{book[:year]}"
-            end
+            display_books(sort_books)
         end
     end
 end
 
+def display_books(book)
+    book.each_with_index do |b|
+        puts "#{b[:title]} by #{b[:author]} was published in #{b[:year]}"
+    end
+end
 books=[]
 loop do
     show_menu
