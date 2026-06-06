@@ -5,7 +5,8 @@ def show_menu
     puts "3.List all the books"
     puts "4.delete a book"
     puts "5.search for a book"
-    puts "6.exit"
+    puts "6.Library Summary"
+    puts "7.exit"
 end
 
 def add_book(books)
@@ -76,6 +77,25 @@ def search_book(books)
     end
 end
 
+def library_summary(books)
+
+    if books.empty?
+        puts "Library is empty"
+    else
+        total_books = books.length
+
+        most_recent_book = books.last
+
+        oldest_book = books.min_by do |book|
+            book[:year]
+        end
+
+        puts "total books: #{total_books}"
+        puts "most recent book: #{most_recent_book[:title]} by #{most_recent_book[:author]} was published in #{most_recent_book[:year]} and belongs to genre #{most_recent_book[:genre]}"
+        puts "oldest book: #{oldest_book[:title]} (#{oldest_book[:year]})"
+    end
+end
+
 books=[]
 loop do
     show_menu
@@ -99,6 +119,8 @@ loop do
         search_book(books)
 
     when "6"
+        library_summary(books)
+    when "7"
         puts "Goodbye!"
         break
     else
