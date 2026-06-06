@@ -6,7 +6,8 @@ def show_menu
     puts "4.delete a book"
     puts "5.search for a book"
     puts "6.Library Summary"
-    puts "7.exit"
+    puts "7.dev stats"
+    puts "8.exit"
 end
 
 def add_book(books)
@@ -96,6 +97,24 @@ def library_summary(books)
     end
 end
 
+def dev_stats(books)
+    total_books=books.count
+    puts "total books: #{total_books}"
+
+    books_after_2000=books.count do |book|
+        book[:year].to_i > 2000
+    end
+    puts "books after 2000: #{books_after_2000}"
+
+    authors=books.map do |book|
+        book[:author]
+    end.uniq
+
+    puts "authors:\n"
+    authors.each do |author|
+        puts "#{author}"
+    end
+end
 books=[]
 loop do
     show_menu
@@ -121,6 +140,8 @@ loop do
     when "6"
         library_summary(books)
     when "7"
+        dev_stats(books)
+    when "8"
         puts "Goodbye!"
         break
     else
